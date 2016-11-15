@@ -18,13 +18,14 @@ import java.util.Map;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener, GoogleMap.OnInfoWindowClickListener {
 
-    public static final String STATE_PLAYGROUND = "state_playground";
+    public static final String STATE_PLAYGROUND = "current_playground";
     private GoogleMap mMap;
     /*Et hashmap som binder markørene på kartet til lekeplassen den tilhører.
-      Dette bruker jeg slik at Playground klassen kun inneholder primitive datastrukturer.
+      Dette bruker jeg slik at Playground klassen kun inneholder primitive datatyper.
     */
     private Map<Marker, Playground> playgroundBinder = new HashMap<Marker, Playground>();
-    public Playground currentMarkedPlayground;
+    //Lager en "dummy" lekeplass slik at jeg slipper å ta hensyn til spesialtilfelle i onMarkerClick(). Dette bør forandres.
+    public Playground currentMarkedPlayground = new Playground(new LatLng(0,0),"","",0);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,18 +56,25 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         //Legger lekeplassene inn på kartet, og legger det inn i hashmappet
         for (int i = 0; i < 4; i++) {
-            Marker currentMarker = mMap.addMarker(new MarkerOptions().position(tempPlaygroundArray.get(i).getLocation()).title(tempPlaygroundArray.get(i).getFlavorText()));
+            Marker currentMarker = mMap.addMarker(new MarkerOptions().position(tempPlaygroundArray.get(i).getPosition()).title(tempPlaygroundArray.get(i).getFlavorText()));
             playgroundBinder.put(currentMarker, tempPlaygroundArray.get(i));
         }
         //Flytter kameraet til en av lekeplassene
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(tempPlaygroundArray.get(0).getLocation()));
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(tempPlaygroundArray.get(0).getPosition()));
         mMap.moveCamera(CameraUpdateFactory.zoomTo(17));
 
         //NB! Siden klassen implementerer lyttegrensesnittene kan jeg bruke metoder rett fra denne klassen.
         mMap.setOnMarkerClickListener(this);
         mMap.setOnInfoWindowClickListener(this);
+
+        // TODO: Lag custom infovindu
     }
 
+    /*
+    Skifter til ParkInspectActivity når man trykker på infovinduet, samt sender markøren klikket hører til.
+    Derfra kan man hente ut informasjonen om lekeplassen inne i ParkInspectActivity sin onCreate().
+    Nøkkelen er CURRENT_PLAYGROUND.
+     */
     public void onInfoWindowClick(Marker marker) {
         Intent intent = new Intent(getBaseContext(), ParkInspectActivity.class);
         intent.putExtra(STATE_PLAYGROUND, currentMarkedPlayground);
@@ -75,6 +83,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     public boolean onMarkerClick(Marker marker) {
+        //Denne if-løkken har jeg slik at om man trykker på en markør to ganger på rad så vil man kjøre onInfoWindowClick-metoden
+        //Føler selv at det er litt mer intuitivt.
+        if (marker.getPosition().equals(currentMarkedPlayground.getPosition())) {
+            onInfoWindowClick(marker);
+        }
+        //Oppdaterer foreløpig trykt markør, samt åpner infovinduet.
         currentMarkedPlayground = playgroundBinder.get(marker);
         marker.showInfoWindow();
         return true;

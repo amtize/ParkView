@@ -17,10 +17,10 @@ public class ParkInspectActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        //FIXME: Her er det feilen ligger. 
-        Playground pg = savedInstanceState.getParcelable(MapsActivity.STATE_PLAYGROUND);
+        //Henter ut lekeplassen som ble sendt fra MapsActivity.
+        Playground pg = getIntent().getParcelableExtra(MapsActivity.STATE_PLAYGROUND);
         TextView tv = (TextView) findViewById(R.id.park_inspect_text);
-        //tv.setText(pg.getFlavorText());
+        tv.setText(pg.getFlavorText());
     }
 
 }
