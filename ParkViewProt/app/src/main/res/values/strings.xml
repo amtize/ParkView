@@ -5,4 +5,8 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_maps">Map</string>
+    <string name="title_prototype">Prototype</string>
+    <string name="button_launch_debug">Start debug modus</string>
+    <string name="button_launch_normal">Start bruker modus</string>
+    <string name="title_activity_park_inspect">ParkInspectActivity</string>
 </resources>

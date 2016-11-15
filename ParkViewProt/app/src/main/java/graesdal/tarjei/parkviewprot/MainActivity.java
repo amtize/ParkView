@@ -10,26 +10,38 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
 
 public class MainActivity extends AppCompatActivity {
 
+    /*
+    MainActivity er foreløpig en "placeholder" som kun velger mellom vanlig modus og debug modus, samt andre ting.
+    Denne eksisterer bare slik at jeg raskt kan bytte mellom de to.
+     */
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        final Intent intent = new Intent(this, MapsActivity.class);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+        //Lager logikk som bytter til den respektive activitien fra MainActivity
+        Button launchDebug = (Button)findViewById(R.id.launch_debug);
+        Button launchNormal = (Button)findViewById(R.id.launch_normal);
+        launchDebug.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "LETS GET SOME PUSSY TONIGHT", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-                startActivity(intent);
+            public void onClick(View v) {
+                startActivity(new Intent(getBaseContext(), MapsActivity.class));
             }
         });
+        launchNormal.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getBaseContext(), MapsActivity.class));
+            }
+        });
+
     }
 
     @Override
