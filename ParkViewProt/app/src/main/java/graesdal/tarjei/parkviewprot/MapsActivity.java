@@ -25,6 +25,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     */
     private Map<Marker, Playground> playgroundBinder = new HashMap<Marker, Playground>();
     //Lager en "dummy" lekeplass slik at jeg slipper å ta hensyn til spesialtilfelle i onMarkerClick(). Dette bør forandres.
+    // FIXME: Finn en annen løsning istedenfor bruk av dummyelement.
     public Playground currentMarkedPlayground = new Playground(new LatLng(0,0),"","",0);
 
     @Override
@@ -83,7 +84,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     public boolean onMarkerClick(Marker marker) {
-        //Denne if-løkken har jeg slik at om man trykker på en markør to ganger på rad så vil man kjøre onInfoWindowClick-metoden
+        //Denne if-løkken har jeg slik at om man trykker på en markør to ganger på rad så vil det være som om du klikker på infovinduet.
         //Føler selv at det er litt mer intuitivt.
         if (marker.getPosition().equals(currentMarkedPlayground.getPosition())) {
             onInfoWindowClick(marker);

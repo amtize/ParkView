@@ -10,6 +10,8 @@ import android.widget.TextView;
 
 public class ParkInspectActivity extends AppCompatActivity {
 
+    Playground playground;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -18,9 +20,9 @@ public class ParkInspectActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         //Henter ut lekeplassen som ble sendt fra MapsActivity.
-        Playground pg = getIntent().getParcelableExtra(MapsActivity.STATE_PLAYGROUND);
+        playground = getIntent().getParcelableExtra(MapsActivity.STATE_PLAYGROUND);
         TextView tv = (TextView) findViewById(R.id.park_inspect_text);
-        tv.setText(pg.getFlavorText());
+        tv.setText(playground.getFlavorText());
     }
 
 }
