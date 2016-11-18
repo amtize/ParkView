@@ -1,11 +1,8 @@
 package graesdal.tarjei.parkviewprot;
 
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
 import android.widget.TextView;
 
 public class ParkInspectActivity extends AppCompatActivity {
@@ -20,9 +17,9 @@ public class ParkInspectActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         //Henter ut lekeplassen som ble sendt fra MapsActivity.
-        playground = getIntent().getParcelableExtra(MapsActivity.STATE_PLAYGROUND);
+        playground = getIntent().getParcelableExtra(MapsActivity.CURRENT_PLAYGROUND);
         TextView tv = (TextView) findViewById(R.id.park_inspect_text);
-        tv.setText(playground.getFlavorText());
+        tv.setText(playground.getName());
     }
 
 }

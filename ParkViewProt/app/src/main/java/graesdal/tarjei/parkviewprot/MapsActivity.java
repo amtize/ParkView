@@ -18,7 +18,7 @@ import java.util.Map;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener, GoogleMap.OnInfoWindowClickListener {
 
-    public static final String STATE_PLAYGROUND = "current_playground";
+    public static final String CURRENT_PLAYGROUND = "current_playground";
     private GoogleMap mMap;
     /*Et hashmap som binder markørene på kartet til lekeplassen den tilhører.
       Dette bruker jeg slik at Playground klassen kun inneholder primitive datatyper.
@@ -78,7 +78,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
      */
     public void onInfoWindowClick(Marker marker) {
         Intent intent = new Intent(getBaseContext(), ParkInspectActivity.class);
-        intent.putExtra(STATE_PLAYGROUND, currentMarkedPlayground);
+        intent.putExtra(CURRENT_PLAYGROUND, currentMarkedPlayground);
         startActivity(intent);
         return;
     }
