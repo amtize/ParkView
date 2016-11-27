@@ -29,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
         //Lager logikk som bytter til den respektive activitien fra MainActivity
         Button launchDebug = (Button)findViewById(R.id.launch_debug);
         Button launchNormal = (Button)findViewById(R.id.launch_normal);
+        // TODO: Lag debug funksjon
         launchDebug.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

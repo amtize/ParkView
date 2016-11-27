@@ -43,6 +43,10 @@
         <activity
             android:name=".ParkInspectActivity"
             android:label="@string/title_activity_park_inspect"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".PlaygroundSubmitActivity"
+            android:label="@string/title_activity_map_submit"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 

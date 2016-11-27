@@ -9,4 +9,5 @@
     <string name="button_launch_debug">Start debug modus</string>
     <string name="button_launch_normal">Start bruker modus</string>
     <string name="title_activity_park_inspect">ParkInspectActivity</string>
+    <string name="title_activity_map_submit">MapSubmitActivity</string>
 </resources>

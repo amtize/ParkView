@@ -30,7 +30,22 @@
         android:layout_height="wrap_content"
         android:text="null"
         android:textSize="50dp"
-        android:layout_centerVertical="true"
+        android:layout_below="@+id/view2"
+        android:layout_centerHorizontal="true" />
+
+    <RatingBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/ratingBar"
+        android:layout_below="@+id/park_inspect_text"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:id="@+id/ratingText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="unrated"
+        android:layout_below="@+id/ratingBar"
         android:layout_centerHorizontal="true" />
 
 </RelativeLayout>

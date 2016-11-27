@@ -1,13 +1,18 @@
 package graesdal.tarjei.parkviewprot;
 
+import android.content.Intent;
+import android.media.Rating;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
-public class ParkInspectActivity extends AppCompatActivity {
+public class ParkInspectActivity extends AppCompatActivity implements RatingBar.OnRatingBarChangeListener {
 
     Playground playground;
+    RatingBar ratingBar;
+    float currentRating = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -18,8 +23,33 @@ public class ParkInspectActivity extends AppCompatActivity {
 
         //Henter ut lekeplassen som ble sendt fra MapsActivity.
         playground = getIntent().getParcelableExtra(MapsActivity.CURRENT_PLAYGROUND);
+        ratingBar = (RatingBar) findViewById(R.id.ratingBar);
+        ratingBar.setOnRatingBarChangeListener(this);
+        //ratingBar.setMax(5);
+        ratingBar.setRating(playground.getRating());
         TextView tv = (TextView) findViewById(R.id.park_inspect_text);
+        TextView rtv = (TextView) findViewById(R.id.ratingText);
+        rtv.setText(String.valueOf(ratingBar.getRating()));
         tv.setText(playground.getName());
+    }
+
+    /*
+    Her overskriver jeg finish()-metoden til systemet som blir kalt når man for eksempel trykker på "back"knappen.
+    Her sender jeg den modifiserte lekeplassen tilbake til MapsActivity klassen. På et eller annent tidspunkt
+    så vil nok dette bli erstattet til å gå rett til internettet.
+     */
+    public void finish() {
+        Intent intent = new Intent(getBaseContext(), MapsActivity.class);
+        if (currentRating != -1) {
+            playground.registerRating(currentRating);
+        }
+        intent.putExtra(MapsActivity.CURRENT_PLAYGROUND, playground);
+        setResult(MapsActivity.RESULT_OK, intent);
+        super.finish();
+    }
+
+    public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
+        currentRating = rating;
     }
 
 }

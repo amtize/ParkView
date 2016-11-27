@@ -14,8 +14,6 @@ import java.util.List;
  * Created by Tarjei on 09.11.2016.
  */
 
-enum VisitorType {INFANT, CHILD, YOUNGSTER };
-
 public class Playground implements Parcelable{
 
     private int id; //Alle lekeplasser har en unik id
@@ -23,13 +21,9 @@ public class Playground implements Parcelable{
     private double longitude;
     private String name; //Foreløpig vil dette være adressen
     private String flavorStr;
-    //private List<Visitor> visitors;
+    private float rating = 0;
+    private int numOfRatings = 0;
 
-    private class Visitor {
-        VisitorType type;
-        int TimeOfDayCheckIn = -1;
-        // TODO: Legg til funksjonalitet for å ha en check-in tid.
-    }
 
     public Playground(LatLng pos, String name, String flavorStr, int id) {
         this.id = id;
@@ -37,7 +31,6 @@ public class Playground implements Parcelable{
         this.longitude = pos.longitude;
         this.name = name;
         this.flavorStr = flavorStr;
-        //visitors = new ArrayList<Visitor>();
     }
 
     public Playground(Parcel input) {
@@ -46,23 +39,33 @@ public class Playground implements Parcelable{
         flavorStr = input.readString();
         latitude = input.readDouble();
         longitude = input.readDouble();
+        rating = input.readFloat();
+        numOfRatings = input.readInt();
     }
 
     //Returnerer LatLng / posisjonen til denne parken.
     public LatLng getPosition() { return new LatLng(latitude, longitude); }
 
-    public int getNumOfVisitors() {
-        //return visitors.size();
-        return -1;
+    public void setPosition(LatLng position) {
+        latitude = position.latitude;
+        longitude = position.longitude;
+    }
+
+
+
+    public void registerRating(float rating) {
+        //Oppdaterer ratingen ved å bruke gjennomsnittet av den nye og de foregående.
+        this.rating = ((this.rating * numOfRatings) + rating) / (numOfRatings + 1);
+        numOfRatings++;
+    }
+
+    public float getRating() {
+        return rating;
     }
 
     public String getFlavorText() { return flavorStr; }
 
     public String getName() { return name; }
-
-    public void checkIn() {
-        // TODO: Legg til funksjonalitet
-    }
 
     //Skriver lekeplassen til en oppgitt Parcel.
     //Denne metoden blir kalt automatisk av operativsystemet når jeg i andre metoder kaller intent.putExtra()
@@ -73,6 +76,8 @@ public class Playground implements Parcelable{
         dest.writeString(flavorStr);
         dest.writeDouble(latitude);
         dest.writeDouble(longitude);
+        dest.writeFloat(rating);
+        dest.writeInt(numOfRatings);
     }
 
     //Har ingen spesielle datatyper her, derfor kan jeg returnere 0.
