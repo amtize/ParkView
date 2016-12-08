@@ -5,13 +5,17 @@ import android.media.Rating;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
+import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
-public class ParkInspectActivity extends AppCompatActivity implements RatingBar.OnRatingBarChangeListener {
+public class ParkInspectActivity extends AppCompatActivity implements RatingBar.OnRatingBarChangeListener, View.OnClickListener {
 
     Playground playground;
     RatingBar ratingBar;
+    CheckBox checkBox;
     float currentRating = -1;
 
     @Override
@@ -31,6 +35,11 @@ public class ParkInspectActivity extends AppCompatActivity implements RatingBar.
         TextView rtv = (TextView) findViewById(R.id.ratingText);
         rtv.setText(String.valueOf(ratingBar.getRating()));
         tv.setText(playground.getName());
+
+        checkBox = (CheckBox) findViewById(R.id.visitedCheckBox);
+        checkBox.setChecked(playground.isVisited());
+        Button checkInButton = (Button) findViewById(R.id.checkInButton);
+        checkInButton.setOnClickListener(this);
     }
 
     /*
@@ -52,4 +61,10 @@ public class ParkInspectActivity extends AppCompatActivity implements RatingBar.
         currentRating = rating;
     }
 
+    @Override
+    public void onClick(View v) {
+        // TODO: If myPosition more than 50 meters from playground.position, display NotCloseEnough
+        checkBox.setChecked(true);
+        playground.setVisited(true);
+    }
 }

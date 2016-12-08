@@ -55,22 +55,6 @@
         android:layout_below="@+id/nameTextView"
         android:layout_centerHorizontal="true" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="null"
-        android:id="@+id/flavorTextView"
-        android:layout_below="@+id/nameEditText"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="74dp" />
-
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/flavorEditText"
-        android:layout_below="@+id/flavorTextView"
-        android:layout_centerHorizontal="true" />
 
 
 </RelativeLayout>

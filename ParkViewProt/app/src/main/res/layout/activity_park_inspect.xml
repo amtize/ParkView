@@ -48,4 +48,21 @@
         android:layout_below="@+id/ratingBar"
         android:layout_centerHorizontal="true" />
 
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Besøkt"
+        android:enabled="false"
+        android:id="@+id/visitedCheckBox"
+        android:layout_below="@+id/ratingText"
+        android:layout_alignEnd="@+id/ratingBar" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Sjekk inn!"
+        android:id="@+id/checkInButton"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true" />
+
 </RelativeLayout>

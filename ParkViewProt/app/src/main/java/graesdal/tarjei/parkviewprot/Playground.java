@@ -23,6 +23,7 @@ public class Playground implements Parcelable{
     private String flavorStr;
     private float rating = 0;
     private int numOfRatings = 0;
+    private boolean visited; //boolean som sier om lekeplassen er besøkt
 
 
     public Playground(LatLng pos, String name, String flavorStr, int id) {
@@ -31,6 +32,7 @@ public class Playground implements Parcelable{
         this.longitude = pos.longitude;
         this.name = name;
         this.flavorStr = flavorStr;
+        visited = false;
     }
 
     public Playground(Parcel input) {
@@ -41,17 +43,24 @@ public class Playground implements Parcelable{
         longitude = input.readDouble();
         rating = input.readFloat();
         numOfRatings = input.readInt();
+        visited = input.readByte() != 0; //konverterer til boolean
     }
 
     //Returnerer LatLng / posisjonen til denne parken.
     public LatLng getPosition() { return new LatLng(latitude, longitude); }
+
+    public int getId() { return id; }
 
     public void setPosition(LatLng position) {
         latitude = position.latitude;
         longitude = position.longitude;
     }
 
+    public void setVisited(boolean val) {
+        this.visited = val;
+    }
 
+    public boolean isVisited() { return visited; }
 
     public void registerRating(float rating) {
         //Oppdaterer ratingen ved å bruke gjennomsnittet av den nye og de foregående.
@@ -78,6 +87,7 @@ public class Playground implements Parcelable{
         dest.writeDouble(longitude);
         dest.writeFloat(rating);
         dest.writeInt(numOfRatings);
+        dest.writeByte((byte) (visited ? 1 : 0)); //konverterer til boolean
     }
 
     //Har ingen spesielle datatyper her, derfor kan jeg returnere 0.

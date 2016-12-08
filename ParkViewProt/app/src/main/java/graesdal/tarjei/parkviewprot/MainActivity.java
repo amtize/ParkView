@@ -1,16 +1,14 @@
 package graesdal.tarjei.parkviewprot;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
+import android.widget.EditText;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -27,19 +25,33 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         //Lager logikk som bytter til den respektive activitien fra MainActivity
-        Button launchDebug = (Button)findViewById(R.id.launch_debug);
-        Button launchNormal = (Button)findViewById(R.id.launch_normal);
+        Button launchDebug = (Button) findViewById(R.id.launch_debug);
+        Button loginButton = (Button) findViewById(R.id.login);
+        final Button makeUserTest = (Button) findViewById(R.id.makeUserButton);
         // TODO: Lag debug funksjon
         launchDebug.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getBaseContext(), MapsActivity.class));
+                Intent intent = new Intent(getBaseContext(), MapsActivity.class);
+                intent.putExtra(MapsActivity.USER_LOGIN, false);
+                startActivity(intent);
             }
         });
-        launchNormal.setOnClickListener(new View.OnClickListener() {
+        loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getBaseContext(), MapsActivity.class));
+                Intent intent = new Intent(getBaseContext(), MapsActivity.class);
+                EditText usernameT = (EditText) findViewById(R.id.usernameEditText);
+                EditText passwordT = (EditText) findViewById(R.id.passwordEditText);
+                intent.putExtra(MapsActivity.USER_LOGIN_DATA, usernameT.getText()+";"+passwordT.getText());
+                intent.putExtra(MapsActivity.USER_LOGIN, true);
+                startActivity(intent);
+            }
+        });
+        makeUserTest.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                testUserCreation();
             }
         });
 
@@ -65,6 +77,11 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void testUserCreation() {
+        User user = new User("Test", "123", 1);
+        WriteToInternalStorage.writeUser(getFilesDir(), user, getApplicationContext());
     }
 
 }

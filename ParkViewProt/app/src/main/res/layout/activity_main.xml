@@ -29,17 +29,17 @@
         android:layout_width="match_parent"
         android:text="Start i debug modus"
         android:textStyle="bold"
-        android:layout_centerVertical="true"
+        android:layout_below="@+id/textView"
         android:layout_alignParentStart="true" />
 
     <Button
-        android:id="@+id/launch_normal"
-        android:layout_width="match_parent"
+        android:id="@+id/login"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Start i normal modus"
+        android:text="Logg inn"
         android:textStyle="bold"
-        android:layout_below="@+id/launch_debug"
-        android:layout_alignParentStart="true" />
+        android:layout_below="@+id/passwordEditText"
+        android:layout_centerHorizontal="true" />
 
 
 
@@ -64,5 +64,35 @@
         android:textSize="50dp"
         android:layout_below="@+id/view"
         android:layout_centerHorizontal="true" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:text="Test"
+        android:ems="10"
+        android:id="@+id/usernameEditText"
+        android:layout_below="@+id/launch_debug"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="60dp" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textPassword"
+        android:text="123"
+        android:ems="10"
+        android:id="@+id/passwordEditText"
+        android:layout_below="@+id/usernameEditText"
+        android:layout_alignStart="@+id/usernameEditText" />
+
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Lag bruker (test)"
+        android:id="@+id/makeUserButton"
+        android:layout_above="@+id/editText"
+        android:layout_alignParentEnd="true" />
 
 </RelativeLayout>
