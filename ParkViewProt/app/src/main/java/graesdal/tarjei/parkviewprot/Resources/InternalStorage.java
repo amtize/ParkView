@@ -1,21 +1,18 @@
-package graesdal.tarjei.parkviewprot;
+package graesdal.tarjei.parkviewprot.Resources;
 
 import android.content.Context;
-import android.view.Gravity;
 import android.widget.Toast;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
-import java.io.ObjectOutput;
 import java.io.ObjectOutputStream;
 
 /**
  * Created by Tarjei on 08.12.2016.
  */
-public class WriteToInternalStorage {
+public class InternalStorage {
 
     public static boolean writeUser(File dir, User user, Context context) {
         String fileName = "userData.txt";
@@ -52,6 +49,7 @@ public class WriteToInternalStorage {
             Toast.makeText(context, "TEST OK, LOGGING IN", Toast.LENGTH_LONG).show();
             return user;
         }
+        Toast.makeText(context, "TEST FAILED, USER NOT LOGGED IN", Toast.LENGTH_LONG).show();
         return null;
     }
 

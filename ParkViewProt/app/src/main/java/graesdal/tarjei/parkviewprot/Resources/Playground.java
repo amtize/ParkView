@@ -1,14 +1,9 @@
-package graesdal.tarjei.parkviewprot;
+package graesdal.tarjei.parkviewprot.Resources;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.support.design.internal.ParcelableSparseArray;
 
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by Tarjei on 09.11.2016.

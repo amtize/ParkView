@@ -1,17 +1,13 @@
 package graesdal.tarjei.parkviewprot;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.location.Location;
-import android.location.LocationListener;
-import android.Manifest;
-import android.os.Looper;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.view.Gravity;
 import android.view.View;
@@ -28,16 +24,17 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
+
+import graesdal.tarjei.parkviewprot.Resources.InternalStorage;
+import graesdal.tarjei.parkviewprot.Resources.Playground;
+import graesdal.tarjei.parkviewprot.Resources.User;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback,
                                                 GoogleMap.OnMarkerClickListener,
@@ -49,6 +46,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     /*
     TODO: FIKS ALT SOM HAR MED ID'er Å GJØRE. NÅ STARTER DET PÅ 0 MEN DET BURDE IKKE DET!
+    TODO: LAG EGEN MAPVIEW_FRAGMENT KLASSE, OG SAMLE ALT SOM HAR MED GOOGLEMAPS API HER.
     Kommentarer:
         - Les mer om singleton og Application-subklassene. Kan jeg da slippe å sende lekeplassene rundt, og heller
         ha et globalt hashmap med all dataen, som gjør det lett å modifisere fra alle deler av appen?
@@ -72,6 +70,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public static final String PLAYGROUND_NAME = "playground_name";
     public static final String USER_LOGIN_DATA = "user_login_data";
     public static final String USER_LOGIN = "user_login";
+    public static final String USER_CHECK_IN = "user_check_in";
     // -- FLAGG --
     public static final int PLAYGROUND_MODIFIED = 1;
     public static final int PLAYGROUND_NOT_MODIFIED = 2;
@@ -86,6 +85,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     Location mCurrentLocation;
     boolean mLocationPermissionGranted;
     LocationRequest mLocationRequest;
+    // -- FRAGMENT --
+    FragmentManager fragmentManager = getSupportFragmentManager();
     // -- BRUKEREN --
     private boolean isLoggedIn;
     private User user = null;
@@ -96,7 +97,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
       Dette bruker jeg slik at Playground klassen kun inneholder primitive datatyper, og ikke
       GoogleMap sitt Markerobjekt.
     */
-    private Map<Marker, Playground> playgroundBinder = new HashMap<Marker, Playground>();
+    private Map<Marker, Playground> playgroundBinder = new HashMap<>();
     private Map<Integer, Marker> markerBinder = new HashMap<>();
     public Marker currentMarkedMarker = null;
     public Marker draggableMarker = null;
@@ -116,6 +117,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
         initiateButtons();
         isLoggedIn = getIntent().getBooleanExtra(USER_LOGIN, false);
+        isLoggedIn = true; //TEST
         if (isLoggedIn) initiateUserData();
     }
 
@@ -124,6 +126,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         super.onRestart();
     }
 
+    @Override
+    public void onStop() {
+        super.onStop();
+        InternalStorage.writeUser(getFilesDir(), user, getApplicationContext());
+    }
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
@@ -133,7 +140,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         if (isLoggedIn && user == null) initiateUserData();
         updateLocationUI();
         mMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(mCurrentLocation.getLatitude(),
-            mCurrentLocation.getLongitude())));
+                mCurrentLocation.getLongitude())));
     }
 
     private synchronized void buildGoogleApiClient() {
@@ -313,6 +320,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 // Om vi får tilbake PLAYGROUND_MODIFIED fra ParkInspectActivitien skal vi erstatte den gamle
                 // lekeplassen med den modifiserte vi får tilsendt.
                 Playground tempPlayground = (Playground)data.getParcelableExtra(MapsActivity.CURRENT_PLAYGROUND);
+                if (tempPlayground.isVisited()) user.visitPlayground(tempPlayground.getId());
                 playgroundBinder.remove(currentMarkedMarker);
                 playgroundBinder.put(currentMarkedMarker, tempPlayground);
             }
@@ -350,7 +358,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         String username = stringFromMain[0];
         String password = stringFromMain[1];
         //Toast.makeText(getApplicationContext(), username + ";" + password, Toast.LENGTH_LONG).show();
-        user = WriteToInternalStorage.readUser(getFilesDir(), username, password, getApplicationContext());
+        user = InternalStorage.readUser(getFilesDir(), username, password, getApplicationContext());
         if (user == null) {
             isLoggedIn = false;
             return;

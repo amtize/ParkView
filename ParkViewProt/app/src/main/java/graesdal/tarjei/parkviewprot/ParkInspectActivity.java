@@ -1,7 +1,6 @@
 package graesdal.tarjei.parkviewprot;
 
 import android.content.Intent;
-import android.media.Rating;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -10,6 +9,8 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.RatingBar;
 import android.widget.TextView;
+
+import graesdal.tarjei.parkviewprot.Resources.Playground;
 
 public class ParkInspectActivity extends AppCompatActivity implements RatingBar.OnRatingBarChangeListener, View.OnClickListener {
 

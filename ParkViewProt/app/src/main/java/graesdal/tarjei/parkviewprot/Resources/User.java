@@ -1,4 +1,4 @@
-package graesdal.tarjei.parkviewprot;
+package graesdal.tarjei.parkviewprot.Resources;
 
 import java.io.Serializable;
 import java.util.ArrayList;

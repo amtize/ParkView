@@ -1,87 +1,69 @@
 package graesdal.tarjei.parkviewprot;
 
-import android.content.Intent;
+import android.net.Uri;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.view.View;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.widget.Button;
-import android.widget.EditText;
 
-public class MainActivity extends AppCompatActivity {
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 
-    /*
-    MainActivity er foreløpig en "placeholder" som kun velger mellom vanlig modus og debug modus, samt andre ting.
-    Denne eksisterer bare slik at jeg raskt kan bytte mellom de to.
-     */
+import java.util.ArrayList;
+
+import graesdal.tarjei.parkviewprot.Resources.Playground;
+import graesdal.tarjei.parkviewprot.Resources.TwoWayHashMap;
+import layout.InspectFragment;
+import layout.MapFragment;
+
+public class MainActivity extends FragmentActivity implements MapFragment.OnMapFragmentInteractionListener, InspectFragment.OnFragmentInteractionListener {
+
+
+    // -- ID --
+    //  ~ Id til parkene. Dette skal etter hvert ligge på nettet og ikke lokalt på telefonen
+    public static int id = 1;
+    // -- HASHMAP BINDER --
+    //  ~ Custom hashmap-objekt som binder sammen lekeplasser og markers
+    private TwoWayHashMap binder = null;
+    // -- FRAGMENTMANAGER --
+    private FragmentManager fragmentManager = getSupportFragmentManager();
 
     @Override
-    protected void onCreate(final Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
 
-        //Lager logikk som bytter til den respektive activitien fra MainActivity
-        Button launchDebug = (Button) findViewById(R.id.launch_debug);
-        Button loginButton = (Button) findViewById(R.id.login);
-        final Button makeUserTest = (Button) findViewById(R.id.makeUserButton);
-        // TODO: Lag debug funksjon
-        launchDebug.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getBaseContext(), MapsActivity.class);
-                intent.putExtra(MapsActivity.USER_LOGIN, false);
-                startActivity(intent);
-            }
-        });
-        loginButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getBaseContext(), MapsActivity.class);
-                EditText usernameT = (EditText) findViewById(R.id.usernameEditText);
-                EditText passwordT = (EditText) findViewById(R.id.passwordEditText);
-                intent.putExtra(MapsActivity.USER_LOGIN_DATA, usernameT.getText()+";"+passwordT.getText());
-                intent.putExtra(MapsActivity.USER_LOGIN, true);
-                startActivity(intent);
-            }
-        });
-        makeUserTest.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                testUserCreation();
-            }
-        });
-
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        MapFragment mapFragment = MapFragment.newInstance(constructParks());
+        fragmentTransaction.add(R.id.container, mapFragment);
+        fragmentTransaction.commit();
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
+    public void onFragmentInteraction(Uri uri) {
+        //TODO: fix
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
+    public void onMarkersCreated(ArrayList<Marker> markers, ArrayList<Playground> playgrounds) {
+        binder = new TwoWayHashMap(markers, playgrounds);
     }
 
-    private void testUserCreation() {
-        User user = new User("Test", "123", 1);
-        WriteToInternalStorage.writeUser(getFilesDir(), user, getApplicationContext());
+    public void onPlaygroundInspectRequest(Marker marker) {
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+        transaction.add(R.id.container, InspectFragment.newInstance(binder.getPlayground(marker)));
+        transaction.addToBackStack(null);
+        transaction.commit();
     }
 
+    private ArrayList<Playground> constructParks() {
+        ArrayList<Playground> tempPlaygroundArray = new ArrayList<>();
+        tempPlaygroundArray.add(new Playground(new LatLng(58.935526, 5.583630), "Torkelstipark", "flavor", id++));
+        tempPlaygroundArray.add(new Playground(new LatLng(58.939257, 5.579617), "Storevardskogen", "flavor", id++));
+        tempPlaygroundArray.add(new Playground(new LatLng(58.936689, 5.572944), "Risnes", "flavor", id++));
+        tempPlaygroundArray.add(new Playground(new LatLng(58.944062, 5.580475), "Myklebust", "flavor", id++));
+        return tempPlaygroundArray;
+    }
 }

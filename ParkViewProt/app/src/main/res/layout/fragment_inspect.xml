@@ -1,0 +1,55 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    android:backgroundTintMode="add"
+    tools:context="layout.InspectFragment"
+    android:paddingBottom="16dp"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp"
+    android:paddingTop="16dp">
+
+    <TextView
+        android:id="@+id/park_inspect_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="null"
+        android:textSize="50dp"
+        android:layout_below="@+id/view2"
+        android:layout_centerHorizontal="true" />
+
+    <RatingBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/ratingBar"
+        android:layout_below="@+id/park_inspect_text"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:id="@+id/ratingText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="unrated"
+        android:layout_below="@+id/ratingBar"
+        android:layout_centerHorizontal="true" />
+
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Besøkt"
+        android:enabled="false"
+        android:id="@+id/visitedCheckBox"
+        android:layout_below="@+id/ratingText"
+        android:layout_alignEnd="@+id/ratingBar" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Sjekk inn!"
+        android:id="@+id/checkInButton"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="167dp" />
+
+</RelativeLayout>
